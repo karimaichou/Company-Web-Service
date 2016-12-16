@@ -3,15 +3,18 @@ package com.insaship.enterprise1.rest;
 
 import com.insaship.enterprise1.dao.IOfferDao;
 import com.insaship.enterprise1.dao.entity.OfferEntity;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Franck-Gravouil on 17/11/2016.
@@ -31,10 +34,30 @@ public class DemoController {
         return new ResponseEntity(offerDao.findAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/oneOffer", method = RequestMethod.GET)
+    @RequestMapping(value = "/singleOffer", method = RequestMethod.GET)
     @ResponseBody
     @Transactional(readOnly = true)
     public ResponseEntity<OfferEntity> getOneOffer() {
         return new ResponseEntity(offerDao.findOne(3), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/offers/{keyword}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get the internship offers where keyword found in title or description")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Internship found"), @ApiResponse(code = 404, message = "No internship found.") })
+    public ResponseEntity<List<OfferEntity>> getPersonCampaignResult(@PathVariable(value = "keyword") String keyword) {
+
+        ResponseEntity<List<OfferEntity>> responseEntity = null;
+        List<OfferEntity> offers;
+
+        offers = offerDao.findOfferByKeyWord(keyword);
+
+        if(offers.isEmpty()) {
+            responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            responseEntity = new ResponseEntity<>(offers, HttpStatus.OK);
+        }
+
+        return responseEntity;
     }
 }

@@ -9,6 +9,9 @@ import java.util.Date;
  * Created by Franck-Gravouil on 17/11/2016.
  */
 @Entity
+@NamedNativeQuery(name = "OfferEntity.findOfferByKeyWord", query = "SELECT * FROM offers o WHERE " +
+        "LOWER(o.title) LIKE LOWER(CONCAT('%',:searchTerm, '%')) OR " +
+        "LOWER(o.description) LIKE LOWER(CONCAT('%',:searchTerm, '%')) AND (o.available)=1" , resultClass = OfferEntity.class)
 @Table(name = "offers")
 public class OfferEntity implements Serializable {
 
