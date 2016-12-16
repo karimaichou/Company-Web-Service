@@ -41,10 +41,10 @@ public class DemoController {
         return new ResponseEntity(offerDao.findOne(3), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/offers/{keyword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/offers", method = RequestMethod.GET)
     @ApiOperation(value = "Get the internship offers where keyword found in title or description")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Internship found"), @ApiResponse(code = 404, message = "No internship found.") })
-    public ResponseEntity<List<OfferEntity>> getPersonCampaignResult(@PathVariable(value = "keyword") String keyword) {
+    public ResponseEntity<List<OfferEntity>> getPersonCampaignResult(@RequestParam(value = "keyword") String keyword) {
 
         ResponseEntity<List<OfferEntity>> responseEntity = null;
         List<OfferEntity> offers;
