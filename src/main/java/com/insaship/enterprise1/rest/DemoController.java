@@ -34,11 +34,24 @@ public class DemoController {
         return new ResponseEntity(offerDao.findAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/singleOffer", method = RequestMethod.GET)
-    @ResponseBody
-    @Transactional(readOnly = true)
-    public ResponseEntity<OfferEntity> getOneOffer() {
-        return new ResponseEntity(offerDao.findOne(3), HttpStatus.OK);
+    @RequestMapping(value = "/offer", method = RequestMethod.GET)
+    @ApiOperation(value = "Get a unique internship offer from its id")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Internship found"), @ApiResponse(code = 404, message = "No internship found.") })
+@Transactional(readOnly = true)
+    public ResponseEntity<OfferEntity> getOneOffer(@RequestParam(value = "id") int id) {
+
+        ResponseEntity<OfferEntity> responseEntity = null;
+        OfferEntity offer = null;
+        offer = offerDao.findOne(id);
+
+        if(offer == null) {
+            responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            responseEntity = new ResponseEntity<>(offer, HttpStatus.OK);
+        }
+
+        return responseEntity;
     }
 
     @RequestMapping(value = "/search/offers", method = RequestMethod.GET)
