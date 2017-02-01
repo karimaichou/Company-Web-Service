@@ -37,11 +37,11 @@ public class DemoController {
     @RequestMapping(value = "/offer", method = RequestMethod.GET)
     @ApiOperation(value = "Get a unique internship offer from its id")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Internship found"), @ApiResponse(code = 404, message = "No internship found.") })
-@Transactional(readOnly = true)
+@   Transactional(readOnly = true)
     public ResponseEntity<OfferEntity> getOneOffer(@RequestParam(value = "id") int id) {
 
-        ResponseEntity<OfferEntity> responseEntity = null;
-        OfferEntity offer = null;
+        ResponseEntity<OfferEntity> responseEntity;
+        OfferEntity offer;
         offer = offerDao.findOne(id);
 
         if(offer == null) {
@@ -57,9 +57,9 @@ public class DemoController {
     @RequestMapping(value = "/search/offers", method = RequestMethod.GET)
     @ApiOperation(value = "Get the internship offers where keyword found in title or description")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Internship found"), @ApiResponse(code = 404, message = "No internship found.") })
-    public ResponseEntity<List<OfferEntity>> getPersonCampaignResult(@RequestParam(value = "keyword") String keyword) {
+    public ResponseEntity<List<OfferEntity>> searchOffer(@RequestParam(value = "keyword") String keyword) {
 
-        ResponseEntity<List<OfferEntity>> responseEntity = null;
+        ResponseEntity<List<OfferEntity>> responseEntity;
         List<OfferEntity> offers;
 
         offers = offerDao.findOfferByKeyWord(keyword);
